@@ -1,5 +1,5 @@
 import XCTest
-@testable import GenericJSON
+@testable import CodingKit
 
 class EqualityTests: XCTestCase {
 
