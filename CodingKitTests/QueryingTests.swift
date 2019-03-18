@@ -1,3 +1,7 @@
+//
+// Copyright © 2019 Zoul. All rights reserved.
+//
+
 import XCTest
 import CodingKit
 

@@ -88,10 +88,10 @@
 			isa = PBXGroup;
 			children = (
 				C3C4A307223FDCC800D9FAC6 /* CodingKit.h */,
-				C3C4A333223FDDDB00D9FAC6 /* Initialization.swift */,
 				C3C4A331223FDDDB00D9FAC6 /* JSON.swift */,
-				C3C4A330223FDDDB00D9FAC6 /* Merging.swift */,
+				C3C4A333223FDDDB00D9FAC6 /* Initialization.swift */,
 				C3C4A332223FDDDB00D9FAC6 /* Querying.swift */,
+				C3C4A330223FDDDB00D9FAC6 /* Merging.swift */,
 				C3C4A308223FDCC800D9FAC6 /* Info.plist */,
 			);
 			path = CodingKit;
@@ -100,11 +100,11 @@
 		C3C4A311223FDCC800D9FAC6 /* CodingKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				C3C4A339223FDDE600D9FAC6 /* InitializationTests.swift */,
 				C3C4A33A223FDDE600D9FAC6 /* CodingTests.swift */,
 				C3C4A33C223FDDE600D9FAC6 /* EqualityTests.swift */,
-				C3C4A339223FDDE600D9FAC6 /* InitializationTests.swift */,
-				C3C4A33B223FDDE600D9FAC6 /* MergingTests.swift */,
 				C3C4A338223FDDE600D9FAC6 /* QueryingTests.swift */,
+				C3C4A33B223FDDE600D9FAC6 /* MergingTests.swift */,
 				C3C4A314223FDCC800D9FAC6 /* Info.plist */,
 			);
 			path = CodingKitTests;
