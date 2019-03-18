@@ -62,29 +62,63 @@ public extension JSON {
         return false
     }
 
+    /// Return `nil` iff this is `.null`, otherwise its value.
+    var value: JSON? {
+        return isNull ? nil : self
+    }
+
     /// If this is an `.array`, return item at index
     ///
     /// If this is not an `.array` or the index is out of bounds, returns `nil`.
-    subscript(index: Int) -> JSON? {
-        if case .array(let arr) = self, arr.indices.contains(index) {
-            return arr[index]
+    subscript(index: Int) -> JSON {
+        get {
+            if case .array(let arr) = self, arr.indices.contains(index) {
+                return arr[index]
+            }
+            return .null
         }
-        return nil
+        set {
+            if case .array(let arr) = self, arr.indices.contains(index) {
+                var new = arr
+                new[index] = newValue
+                self = .array(new)
+            }
+        }
     }
 
     /// If this is an `.object`, return item at key
-    subscript(key: String) -> JSON? {
-        if case .object(let dict) = self {
-            return dict[key]
+    subscript(key: String) -> JSON {
+        get {
+            if case .object(let dict) = self {
+                return dict[key] ?? .null
+            }
+            return .null
         }
-        return nil
+        set {
+            if case .object(let dict) = self {
+                var new = dict
+                new[key] = newValue
+                self = .object(new)
+            } else {
+                var object: [String: JSON] = [key: newValue]
+                if let value = self.value {
+                    object[""] = value // Does this work?
+                }
+                self = .object(object)
+            }
+        }
     }
 
     /// Dynamic member lookup sugar for string subscripts
     ///
     /// This lets you write `json.foo` instead of `json["foo"]`.
-    subscript(dynamicMember member: String) -> JSON? {
-        return self[member]
+    subscript(dynamicMember member: String) -> JSON {
+        get {
+            return self[member]
+        }
+        set {
+            self[member] = newValue
+        }
     }
     
     /// Return the JSON type at the keypath if this is an `.object`, otherwise `nil`
