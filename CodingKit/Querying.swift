@@ -22,6 +22,14 @@ public extension JSON {
         return nil
     }
 
+    /// Return the int value if this is an integer `.number`, otherwise `nil`
+    var intValue: Int? {
+        if case .number(let float) = self, let int = Int(exactly: float) {
+            return int
+        }
+        return nil
+    }
+
     /// Return the bool value if this is a `.bool`, otherwise `nil`
     var boolValue: Bool? {
         if case .bool(let value) = self {
