@@ -57,4 +57,14 @@ class InitializationTests: XCTestCase {
             "b": true,
         ])
     }
+
+    func testConvenienceInitialization() throws {
+        let input = """
+            {"name": "Jason", "age": 30}
+        """
+        let json = try JSON(serialized: input)
+        let jason = try Person(byDecoding: json)
+        XCTAssertEqual(jason.name, "Jason")
+        XCTAssertEqual(jason.age, 30)
+    }
 }
