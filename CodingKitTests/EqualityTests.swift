@@ -15,4 +15,12 @@ class EqualityTests: XCTestCase {
         XCTAssertEqual("foo" as JSON, "foo" as JSON)
         XCTAssertEqual(["foo": ["bar"]] as JSON, ["foo": ["bar"]] as JSON)
     }
+
+    func testHeterogenousArray() {
+        let json: JSON = [nil, 1, "two", 3.0]
+        XCTAssertEqual(json[0], .null)
+        XCTAssertEqual(json[1].intValue, 1)
+        XCTAssertEqual(json[2].stringValue, "two")
+        XCTAssertEqual(json[3].floatValue, 3.0)
+    }
 }

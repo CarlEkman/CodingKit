@@ -63,4 +63,98 @@ class CodingTests: XCTestCase {
         let descriptions = fragments.map { $0.debugDescription }
         XCTAssertEqual(descriptions, ["\"foo\"", "1.0", "true", "null"])
     }
+
+    func testHeterogenousCollections() {
+        let one = 1
+        let zero = 0
+        let string = "string"
+        let bool = true
+        let dict = [
+            "one": one,
+            "zero": zero,
+            "string": string,
+            "bool": bool,
+            "null": nil,
+            "array": [],
+            "object": [:],
+            ] as [String : Any?]
+
+        let json: JSON = [
+            "one": 1,
+            "zero": 0,
+            "string": "string",
+            "bool": true,
+            "null": nil,
+            "array": [],
+            "object": [:],
+            ]
+        XCTAssertEqual(json, dict.asJSON)
+    }
+
+    private struct Person: Codable {
+        let name: String
+        let age: Int
+    }
+
+    func testDecodableFromLiteral() throws {
+        let jason = try Person(byDecoding: [
+            "name": "Jason",
+            "age": 30])
+        XCTAssertEqual(jason.name, "Jason")
+        XCTAssertEqual(jason.age, 30)
+    }
+
+    func testDecodableFromRaw() throws {
+        let input = """
+            {"name": "Jason", "age": 30}
+            """
+        let json = try! JSONDecoder().decode(JSON.self, from: input.data(using: .utf8)!)
+        let jason = try Person(byDecoding: json)
+        XCTAssertEqual(jason.name, "Jason")
+        XCTAssertEqual(jason.age, 30)
+    }
+
+    func testDecodingFromArray() throws {
+        let input = """
+            [{"name": "Jason", "age": 30},
+             {"name": "Annie", "age": 25},
+             {"name": "Peter", "age": 45}]
+        """
+        let json = try JSON(serialized: input)
+        let people: [Person] = try json^
+        XCTAssertEqual(people.count, 3)
+        XCTAssertEqual(people[0].name, "Jason")
+        XCTAssertEqual(people[0].age, 30)
+        XCTAssertEqual(people[1].name, "Annie")
+        XCTAssertEqual(people[1].age, 25)
+        XCTAssertEqual(people[2].name, "Peter")
+        XCTAssertEqual(people[2].age, 45)
+    }
+
+    func testDecodingNestedStructures() throws {
+        let input = """
+            {"teacher": {"name": "Alice", "age": 36},
+             "students": [
+                {"name": "Tim", "age": 8},
+                {"name": "Sara", "age": 8},
+                {"name": "Linn", "age": 7}
+             ]}
+        """
+        let json = try JSON(serialized: input)
+
+        let classroom: Classroom = try json^
+
+        let teacher = classroom.teacher
+        XCTAssertEqual(teacher.name, "Alice")
+        XCTAssertEqual(teacher.age, 36)
+
+        let students = classroom.students
+        XCTAssertEqual(students.count, 3)
+        XCTAssertEqual(students[0].name, "Tim")
+        XCTAssertEqual(students[0].age, 8)
+        XCTAssertEqual(students[1].name, "Sara")
+        XCTAssertEqual(students[1].age, 8)
+        XCTAssertEqual(students[2].name, "Linn")
+        XCTAssertEqual(students[2].age, 7)
+    }
 }

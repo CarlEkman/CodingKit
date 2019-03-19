@@ -3,7 +3,7 @@
 //
 
 import XCTest
-import CodingKit
+@testable import CodingKit
 
 class MergingTests: XCTestCase {
 
